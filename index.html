@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五上國語形近字與部件看寫特攻隊</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-light: #EEF2FF;
+      --accent: #F59E0B;
+      --accent-light: #FEF3C7;
+      --success: #10B981;
+      --error: #EF4444;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 720px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .controls-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    select {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 2px solid transparent;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .mode-toggle {
+      display: flex;
+      background: #E2E8F0;
+      border-radius: 12px;
+      padding: 3px;
+    }
+
+    .mode-btn {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .mode-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: #F1F5F9;
+      color: var(--text-muted);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6);
+      transition: width 0.3s ease;
+    }
+
+    .card-question {
+      background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
+      border: 2px solid #E2E8F0;
+      border-radius: 20px;
+      padding: 24px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .phrase-display {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 70px;
+    }
+
+    .target-zhuyin-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      border: 3px dashed var(--primary);
+      color: var(--primary);
+      border-radius: 14px;
+      padding: 2px 14px;
+      font-size: 2rem;
+      min-width: 80px;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-audio {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-audio:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-hint-toggle {
+      background: transparent;
+      border: none;
+      color: #D97706;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .btn-hint-toggle:hover {
+      background: var(--accent-light);
+    }
+
+    .hint-container {
+      display: none;
+      width: 100%;
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.95rem;
+      color: #92400E;
+      line-height: 1.6;
+    }
+
+    .hint-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      padding: 4px 10px;
+      background: #FFFFFF;
+      border: 1px solid #D97706;
+      border-radius: 6px;
+      color: #92400E;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* 模式一：形近字選項 */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .btn-opt {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-radius: 20px;
+      font-size: 3.2rem;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 20px;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .btn-opt:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-3px);
+    }
+
+    .btn-opt.correct {
+      background: #ECFDF5 !important;
+      border-color: var(--success) !important;
+      color: #065F46 !important;
+    }
+
+    .btn-opt.wrong {
+      background: #FEF2F2 !important;
+      border-color: var(--error) !important;
+      color: #991B1B !important;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    /* 模式二：遮蔽部件看寫關卡 */
+    .masked-write-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .masked-display-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFF;
+      border: 2px dashed #CBD5E1;
+      padding: 16px 24px;
+      border-radius: 16px;
+      width: 100%;
+    }
+
+    .masked-char-box {
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #1E293B;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      border: 2px solid #CBD5E1;
+      border-radius: 16px;
+      background: #FFFFFF;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .canvas-grid-line {
+      position: absolute;
+      pointer-events: none;
+    }
+    .canvas-grid-h {
+      top: 50%; left: 0; right: 0;
+      border-top: 1px dashed #E2E8F0;
+    }
+    .canvas-grid-v {
+      left: 50%; top: 0; bottom: 0;
+      border-left: 1px dashed #E2E8F0;
+    }
+
+    canvas {
+      display: block;
+      border-radius: 14px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .canvas-tools {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .btn-tool {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .reveal-box {
+      display: none;
+      font-size: 1.25rem;
+      color: var(--primary);
+      font-weight: 800;
+      padding: 10px 20px;
+      background: var(--primary-light);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .feedback-box {
+      display: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .feedback-box.correct {
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .feedback-box.wrong {
+      background: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    .btn-next {
+      display: none;
+      width: 100%;
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="header-bar">
+    <div class="controls-left">
+      <select id="lessonSelect" onchange="changeLesson(this.value)"></select>
+      
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeChoiceBtn" onclick="switchMode('choice')">辨析選字</button>
+        <button class="mode-btn" id="modeWriteBtn" onclick="switchMode('write')">遮部件看寫 ✍</button>
+      </div>
+    </div>
+
+    <div class="badge" id="scoreDisplay">第 1 / 14 題</div>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+
+  <div id="quizContainer">
+    <div class="card-question">
+      <div class="phrase-display" id="phraseDisplay"></div>
+      
+      <div class="action-row">
+        <button class="btn-audio" onclick="speakCurrentWord()">
+          🔊 語音報讀
+        </button>
+        <button class="btn-hint-toggle" onclick="toggleHint()">
+          💡 部件口訣提示
+        </button>
+      </div>
+
+      <div class="hint-container" id="hintBox">
+        <div id="hintContent"></div>
+        <button class="hint-audio-btn" onclick="speakHintMnemonic()">
+          🔊 聽口訣念法
+        </button>
+      </div>
+    </div>
+
+    <!-- 模式一：形近字選項 -->
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <!-- 模式二：遮蔽部件看寫關卡 -->
+    <div class="masked-write-container" id="maskedWriteContainer">
+      <div class="masked-display-card">
+        <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">看殘餘部件，寫出完整生字：</span>
+        <div class="masked-char-box" id="maskedCharDisplay">⬛＋皮</div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <div class="canvas-grid-line canvas-grid-h"></div>
+        <div class="canvas-grid-line canvas-grid-v"></div>
+        <canvas id="writeCanvas" width="220" height="220"></canvas>
+      </div>
+
+      <div class="canvas-tools">
+        <button class="btn-tool" onclick="clearCanvas()">🧹 清除重寫</button>
+        <button class="btn-tool" onclick="revealAnswer()">👀 看正解對答案</button>
+      </div>
+
+      <div class="reveal-box" id="revealBox"></div>
+    </div>
+
+    <!-- 反饋與按鈕 -->
+    <div class="feedback-box" id="feedbackBox" style="margin-top: 14px;"></div>
+    <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="margin-top: 14px;">
+      下一題 ➜
+    </button>
+  </div>
+</div>
+
+<script>
+// 1至12課完整題庫
+const lessonsData = {
+  1: {
+    title: "第一課《你我之間》",
+    questions: [
+      { pre: "", target: "彼", post: "此", zhuyin: "ㄅㄧˇ", masked: "⬛＋皮", options: ["彼", "耐"], diff: "ㄔ（雙人旁） vs 而（寸部）", memo: "雙人同行去彼岸，耐心等待要規矩。" },
+      { pre: "關", target: "係", post: "", zhuyin: "ㄒㄧˋ", masked: "⬛＋系", options: ["係", "孫"], diff: "亻（單人旁） vs 子（子部）", memo: "一個人有關係，兒女的兒子是子孫。" },
+      { pre: "", target: "融", post: "洽", zhuyin: "ㄖㄨㄥˊ", masked: "鬲＋⬛", options: ["融", "隔"], diff: "鬲＋虫 vs 阝＋鬲", memo: "蟲在鍋下化成水為融，左有土牆相隔開。" },
+      { pre: "融", target: "洽", post: "", zhuyin: "ㄑㄧㄚˋ", masked: "⬛＋合", options: ["洽", "恰"], diff: "氵（水部） vs 忄（心部）", memo: "說話如水般流暢融洽，用心思考恰恰好。" },
+      { pre: "周", target: "遭", post: "", zhuyin: "ㄗㄠ", masked: "⬛＋曹", options: ["遭", "槽"], diff: "辶（走部） vs 木（木部）", memo: "繞了一圈周遭看，木頭做的是水槽。" },
+      { pre: "", target: "擁", post: "抱", zhuyin: "ㄩㄥˇ", masked: "⬛＋雍", options: ["擁", "痛"], diff: "扌（手部） vs 疒（病部）", memo: "用雙手環擁抱，生病受傷才會痛。" },
+      { pre: "", target: "堅", post: "定", zhuyin: "ㄐㄧㄢ", masked: "臤＋⬛", options: ["堅", "緊"], diff: "土（土部） vs 糸（絲部）", memo: "土質厚實最堅定，用線纏繞綁得很緊。" },
+      { pre: "", target: "耐", post: "勞", zhuyin: "ㄋㄞˋ", masked: "而＋⬛", options: ["耐", "而"], diff: "寸（寸部） vs 無寸", memo: "有分寸規矩才能耐勞，少了一寸只是而已。" },
+      { pre: "耐", target: "勞", post: "", zhuyin: "ㄌㄠˊ", masked: "𤇾＋⬛", options: ["勞", "榮"], diff: "力（力部） vs 木（木部）", memo: "用力流汗很辛勞，木頭開花真光榮。" },
+      { pre: "真", target: "諦", post: "", zhuyin: "ㄉㄧˋ", masked: "⬛＋帝", options: ["諦", "締"], diff: "言（言部） vs 糹（絞絲旁）", memo: "用言語探索真諦，用絲線緊緊連締結。" },
+      { pre: "", target: "刷", post: "牙", zhuyin: "ㄕㄨㄚ", masked: "尸巾＋⬛", options: ["刷", "唰"], diff: "刂（刀部） vs 口（口部）", memo: "拿牙刷如刀輕利刷，張口聲音發出唰。" },
+      { pre: "牙", target: "膏", post: "", zhuyin: "ㄍㄠ", masked: "高＋⬛", options: ["膏", "高"], diff: "月（肉部） vs 無月", memo: "油脂肉滑成了牙膏，樓層疊起才是高。" },
+      { pre: "", target: "協", post: "助", zhuyin: "ㄒㄧㄝˊ", masked: "⬛＋劦", options: ["協", "脅"], diff: "十＋三力 vs 月＋三力", memo: "十全十美合三力來協助，肉體被壓迫是威脅。" },
+      { pre: "提", target: "供", post: "", zhuyin: "ㄍㄨㄥ", speechWord: "提供", speechTarget: "供", options: ["供", "拱"], diff: "亻（單人旁） vs 扌（手部）", memo: "人準備物資來提供，雙手抬起相環拱。" }
+    ]
+  },
+  2: {
+    title: "第二課《風起，大家都在》",
+    questions: [
+      { pre: "直", target: "笛", post: "", zhuyin: "ㄉㄧˊ", masked: "⬛／由", options: ["笛", "苗"], diff: "竹（竹頭） vs 艹（草頭）", memo: "竹子削洞做直笛，田裡長出小綠苗。" },
+      { pre: "演", target: "奏", post: "", zhuyin: "ㄗㄡˋ", masked: "𡗗＋⬛", options: ["奏", "泰"], diff: "夭（二人舉手） vs 氺（水部）", memo: "雙手奉琴演奏樂，下有流水天下泰平。" },
+      { pre: "", target: "簡", post: "單", zhuyin: "ㄐㄧㄢˇ", masked: "⬛／間", options: ["簡", "剪"], diff: "竹（竹頭） vs 刀（刀部）", memo: "竹片刻字清楚簡潔，拿刀裁布叫作剪。" },
+      { pre: "", target: "旋", post: "律", zhuyin: "ㄒㄩㄢˊ", speechWord: "旋律", speechTarget: "旋", masked: "方＋⬛", options: ["旋", "放"], diff: "疋（旋轉步） vs 攵（輕敲）", memo: "旗幟隨風飄旋轉，輕輕推把它放開。" },
+      { pre: "規", target: "律", post: "", zhuyin: "ㄌㄩˋ", masked: "⬛＋聿", options: ["律", "津"], diff: "彳（雙人） vs 氵（水部）", memo: "雙腳規律走律動，水流渡口稱為津。" },
+      { pre: "", target: "縈", post: "繞", zhuyin: "ㄧㄥˊ", masked: "𤇾＋⬛", options: ["縈", "勞"], diff: "糸（絲部） vs 力（力部）", memo: "絲線千迴百轉縈繞，出力耕作很辛勞。" },
+      { pre: "縈", target: "繞", post: "", zhuyin: "ㄖㄠˋ", masked: "⬛＋堯", options: ["繞", "饒"], diff: "糹（絞絲） vs 飠（食部）", memo: "繩線旋繞在周圍，食物豐富得富饒。" },
+      { pre: "樹", target: "梢", post: "", zhuyin: "ㄕㄠ", masked: "⬛＋肖", options: ["梢", "稍"], diff: "木（木部） vs 禾（禾部）", memo: "樹木最尖端是樹梢，禾苗稍微長大了一點。" },
+      { pre: "走", target: "廊", post: "", zhuyin: "ㄌㄤˊ", masked: "⬛＋郎", options: ["廊", "郎"], diff: "广（廣字頭） vs 阝（右邑旁）", memo: "有屋頂遮蔽是長廊，好青年稱作美少年新郎。" },
+      { pre: "", target: "熟", post: "悉", zhuyin: "ㄕㄡˊ", masked: "孰＋⬛", options: ["熟", "孰"], diff: "灬（火部） vs 無火底", memo: "底下生火煮到熟，誰是誰非問個孰。" },
+      { pre: "熟", target: "悉", post: "", zhuyin: "ㄒㄧ", masked: "采＋⬛", options: ["悉", "采"], diff: "心（心部） vs 無心", memo: "全心了解就很熟悉，手摘樹上果叫作采。" },
+      { pre: "和", target: "諧", post: "", zhuyin: "ㄒㄧㄝˊ", masked: "⬛＋皆", options: ["諧", "偕"], diff: "言（言部） vs 亻（單人旁）", memo: "言語融洽心和諧，人與人同行並偕老。" },
+      { pre: "", target: "階", post: "梯", zhuyin: "ㄐㄧㄝ", masked: "⬛＋皆", options: ["階", "價"], diff: "阝（左阜） vs 亻（單人旁）", memo: "走在土坡石階梯，人標物品有身價。" },
+      { pre: "必", target: "須", post: "", zhuyin: "ㄒㄩ", masked: "頁＋⬛", options: ["須", "需"], diff: "彡（鬚毛貌） vs 雨（雨部）", memo: "臉龐鬍須是必須，天上落雨急需傘。" },
+      { pre: "花", target: "絮", post: "", zhuyin: "ㄒㄩˋ", masked: "如＋⬛", options: ["絮", "恕"], diff: "糸（絲部） vs 心（心部）", memo: "像絲棉散落的是花絮，如其心寬容稱寬恕。" },
+      { pre: "隊", target: "伍", post: "", zhuyin: "ㄨˇ", masked: "⬛＋五", options: ["伍", "五"], diff: "亻（單人旁） vs 數字五", memo: "五個人站一列成隊伍，純數字一二三四五。" },
+      { pre: "", target: "威", post: "力", zhuyin: "ㄨㄟ", masked: "戊＋⬛", options: ["威", "咸"], diff: "戈＋女 vs 戈＋口", memo: "兵戈護女顯神威，張口吃鹽感到咸。" }
+    ]
+  },
+  3: {
+    title: "第三課《廉頗與藺相如》",
+    questions: [
+      { pre: "和氏", target: "璧", post: "", zhuyin: "ㄅㄧˋ", masked: "辟＋⬛", options: ["璧", "壁"], diff: "玉（玉部） vs 土（土部）", memo: "珍奇美玉和氏璧，泥土磚瓦堆成壁。" },
+      { pre: "", target: "歸", post: "還", zhuyin: "ㄍㄨㄟ", speechWord: "歸還", speechTarget: "歸", masked: "𠂤＋⬛＋帚", options: ["歸", "掃"], diff: "𠂤＋止 vs 扌（手部）", memo: "旅人止步歸家鄉，手拿竹帚把地掃。" },
+      { pre: "", target: "諸", post: "侯", zhuyin: "ㄓㄨ", masked: "⬛＋者", options: ["諸", "堵"], diff: "言（言部） vs 土（土部）", memo: "開口向諸位說話，用土牆阻堵水流。" },
+      { pre: "諸", target: "侯", post: "", zhuyin: "ㄏㄡˊ", masked: "亻＋⬛＋矢", options: ["侯", "候"], diff: "無中間一豎 vs 有中間一豎", memo: "箭靶封爵諸侯王，立人等待等時候。" },
+      { pre: "", target: "挺", post: "身而出", zhuyin: "ㄊㄧㄥˇ", masked: "⬛＋廷", options: ["挺", "庭"], diff: "扌（手部） vs 广（廣字頭）", memo: "挺直拔手挺身出，屋簷圍成前院庭。" },
+      { pre: "升", target: "官", post: "", zhuyin: "ㄍㄨㄢ", masked: "⬛＋㠯", options: ["官", "管"], diff: "宀（官帽） vs 竹（竹頭）", memo: "戴上官帽升了官，竹製長笛笛音管。" },
+      { pre: "", target: "軍", post: "人", zhuyin: "ㄐㄩㄣ", masked: "冖＋⬛", options: ["軍", "暈"], diff: "車（軍陣） vs 日（日頭）", memo: "車行戰陣為大軍，日頭曬久頭會暈。" },
+      { pre: "", target: "羞", post: "辱", zhuyin: "ㄒㄧㄡ", masked: "羊＋⬛", options: ["羞", "差"], diff: "丑（手中持羊） vs 工（差事）", memo: "雙手奉羊面帶羞，工字底下一步之差。" },
+      { pre: "羞", target: "辱", post: "", zhuyin: "ㄖㄨˋ", masked: "辰＋⬛", options: ["辱", "唇"], diff: "寸（法度戒懲） vs 口（口部）", memo: "犯法受罰是恥辱，牙齒外面是嘴唇。" },
+      { pre: "", target: "懦", post: "弱", zhuyin: "ㄋㄨㄛˋ", masked: "⬛＋需", options: ["懦", "需"], diff: "忄（心部） vs 雨（雨部）", memo: "心生害怕真膽懦，天旱無水急需雨。" },
+      { pre: "羞", target: "恥", post: "", zhuyin: "ㄔˇ", masked: "⬛＋心", options: ["恥", "扯"], diff: "耳（耳部） vs 扌（手部）", memo: "聽聞過錯耳根紅叫羞恥，動手拉開名為拉扯。" },
+      { pre: "", target: "權", post: "勢", zhuyin: "ㄑㄩㄢˊ", masked: "⬛＋雚", options: ["權", "觀"], diff: "木（木部） vs 見（見部）", memo: "秤錘權木掌權勢，睜大眼睛看奇觀。" },
+      { pre: "權", target: "勢", post: "", zhuyin: "ㄕˋ", masked: "執＋⬛", options: ["勢", "熱"], diff: "力（力部） vs 灬（火部）", memo: "執掌力量顯聲勢，四點燃火天氣熱。" },
+      { pre: "", target: "攻", post: "打", zhuyin: "ㄍㄨㄥ", masked: "工＋⬛", options: ["攻", "功"], diff: "攵（敲擊） vs 力（力部）", memo: "拿起敲擊去攻打，費盡力氣立大功。" },
+      { pre: "國", target: "君", post: "", zhuyin: "ㄐㄩㄣ", masked: "尹＋⬛", options: ["君", "郡"], diff: "口（號令） vs 阝（邑部）", memo: "手握權杖號令為君，右邊加城邑是分郡。" },
+      { pre: "坐", target: "鎮", post: "", zhuyin: "ㄓㄣˋ", speechWord: "坐鎮", speechTarget: "鎮", masked: "⬛＋眞", options: ["鎮", "填"], diff: "金（金屬重器） vs 土（土部）", memo: "銅鐵重器能坐鎮，泥土挖來把坑填。" },
+      { pre: "羞", target: "愧", post: "", zhuyin: "ㄎㄨㄟˋ", masked: "⬛＋鬼", options: ["愧", "塊"], diff: "忄（心部） vs 土（土部）", memo: "心中不安深感慚愧，泥土聚結成土塊。" },
+      { pre: "負", target: "荊", post: "請罪", zhuyin: "ㄐㄧㄥ", masked: "⬛／刑", options: ["荊", "刑"], diff: "艹（草部） vs 刂（刀部）", memo: "帶刺草木名紫荊，用刀處分施酷刑。" },
+      { pre: "", target: "肝", post: "膽相照", zhuyin: "ㄍㄢ", masked: "⬛＋干", options: ["肝", "干"], diff: "月（肉部） vs 無月", memo: "人體內臟是肝膽，無肉單純是盾干。" }
+    ]
+  },
+  4: {
+    title: "第四課《來場快樂的桌遊》",
+    questions: [
+      { pre: "大", target: "廳", post: "", zhuyin: "ㄊㄧㄥ", masked: "⬛＋聽", options: ["廳", "聽"], diff: "广（廣字頭） vs 耳（耳部）", memo: "有大屋簷叫客廳，用耳專注來傾聽。" },
+      { pre: "年", target: "齡", post: "", zhuyin: "ㄌㄧㄥˊ", masked: "⬛＋令", options: ["齡", "令"], diff: "齒（齒部） vs 人（人部）", memo: "牙齒換盡算年齡，發號命令聽指令。" },
+      { pre: "氣", target: "氛", post: "", zhuyin: "ㄈㄣ", masked: "⬛＋分", options: ["氛", "分"], diff: "气（氣部） vs 刀（八＋刀）", memo: "空氣散發好氣氛，一把刀切成兩分。" },
+      { pre: "春", target: "筍", post: "", zhuyin: "ㄙㄨㄣˇ", masked: "⬛／旬", options: ["筍", "旬"], diff: "竹（竹頭） vs 勹（包覆）", memo: "竹子幼苗長嫩筍，十天為期是一旬。" },
+      { pre: "根", target: "據", post: "", zhuyin: "ㄐㄩˋ", masked: "⬛＋虍豕", options: ["據", "劇"], diff: "扌（手部） vs 刂（刀部）", memo: "憑手依據抓得據，持刀戲鬥演好劇。" },
+      { pre: "", target: "例", post: "如", zhuyin: "ㄌㄧˋ", masked: "⬛＋列", options: ["例", "列"], diff: "亻（單人旁） vs 刂（刀部）", memo: "人人可仿照為範例，持刀排整齊叫整列。" },
+      { pre: "", target: "寓", post: "教於樂", zhuyin: "ㄩˋ", speechWord: "寓教於樂", speechTarget: "寓", masked: "⬛＋禺", options: ["寓", "遇"], diff: "宀（房屋） vs 辶（走步）", memo: "藏於屋宇叫寓言，走在路上偶然相遇。" },
+      { pre: "單", target: "純", post: "", zhuyin: "ㄔㄨㄣˊ", masked: "⬛＋屯", options: ["純", "屯"], diff: "糹（絞絲） vs 無絲旁", memo: "蠶絲潔白質單純，草芽剛出是軍屯。" },
+      { pre: "下", target: "棋", post: "", zhuyin: "ㄑㄧˊ", masked: "⬛＋其", options: ["棋", "旗"], diff: "木（木部） vs 㫃（旗部）", memo: "木頭刻子來下棋，方巾迎風飄戰旗。" },
+      { pre: "", target: "撲", post: "克牌", zhuyin: "ㄆㄨ", masked: "⬛＋菐", options: ["撲", "僕"], diff: "扌（手部） vs 亻（單人旁）", memo: "用手拍打向前撲，辛勤工作是奴僕。" },
+      { pre: "", target: "患", post: "得患失", zhuyin: "ㄏㄨㄢˋ", masked: "串＋⬛", options: ["患", "串"], diff: "心（心部） vs 無心", memo: "心頭懸著成憂患，竹籤串起肉一串。" },
+      { pre: "", target: "富", post: "足", zhuyin: "ㄈㄨˋ", masked: "⬛＋畐", options: ["富", "副"], diff: "宀＋畐 vs 畐＋刂", memo: "屋有田一口家境富，刀切在旁為副手。" }
+    ]
+  },
+  5: {
+    title: "第五課《超級英雄》",
+    questions: [
+      { pre: "", target: "授", post: "權", zhuyin: "ㄕㄡˋ", masked: "⬛＋受", options: ["授", "受"], diff: "扌（手部） vs 無手旁", memo: "伸手給予稱傳授，張手接納是接受。" },
+      { pre: "", target: "違", post: "法", zhuyin: "ㄨㄟˊ", masked: "⬛＋韋", options: ["違", "偉"], diff: "辶（走部） vs 亻（單人旁）", memo: "走偏正道是違規，人品卓越是偉大。" },
+      { pre: "", target: "侵", post: "犯", zhuyin: "ㄑㄧㄣ", masked: "⬛＋寖(省)", options: ["侵", "浸"], diff: "亻（單人旁） vs 氵（水部）", memo: "有人持帚偷偷侵略，用水淹泡叫浸濕。" },
+      { pre: "侵", target: "犯", post: "", zhuyin: "ㄈㄢˋ", masked: "犭＋⬛", options: ["犯", "狂"], diff: "卩（跪坐人） vs 王（王字）", memo: "野犬咬人觸犯法，野犬稱王真發狂。" },
+      { pre: "", target: "盜", post: "版", zhuyin: "ㄉㄠˋ", masked: "㳄＋⬛", options: ["盜", "姿"], diff: "氵＋皿 vs 女（女部）", memo: "貪求財物叫強盜，女孩儀態好身姿。" },
+      { pre: "", target: "剪", post: "輯", zhuyin: "ㄐㄧㄢˇ", masked: "前＋⬛", options: ["剪", "箭"], diff: "刀（刀部） vs 竹（竹頭）", memo: "拿刀裁切修剪片，竹竿削尖射出箭。" },
+      { pre: "剪", target: "輯", post: "", zhuyin: "ㄐㄧˊ", masked: "⬛＋咠", options: ["輯", "緝"], diff: "車（車部） vs 糹（絞絲）", memo: "車載聚集眾篇輯，絲繩抓拿通緝犯。" },
+      { pre: "", target: "營", post: "利", zhuyin: "ㄧㄥˊ", masked: "𤇾＋⬛", options: ["營", "榮"], diff: "呂（營帳） vs 木（木部）", memo: "築起營舍經營營業，木枝開花光榮耀。" },
+      { pre: "", target: "創", post: "作", zhuyin: "ㄔㄨㄤˋ", speechWord: "創作", speechTarget: "創", masked: "倉＋⬛", options: ["創", "倉"], diff: "刂（刀部） vs 無刀", memo: "刀刻立新為創造，米糧積聚大穀倉。" },
+      { pre: "出", target: "版", post: "", zhuyin: "ㄅㄢˇ", masked: "⬛＋反", options: ["版", "板"], diff: "片（木片） vs 木（原木）", memo: "片片木板印刷版，整塊大木是黑板。" },
+      { pre: "權", target: "益", post: "", zhuyin: "ㄧˋ", masked: "八一＋⬛", options: ["益", "溢"], diff: "皿（器皿） vs 氵（水部）", memo: "水滿器皿大家受益，水加太滿往外溢。" },
+      { pre: "傳", target: "播", post: "", zhuyin: "ㄅㄛ", speechWord: "傳播", speechTarget: "播", masked: "⬛＋番", options: ["播", "插"], diff: "番（播種） vs 千（插刺）", memo: "伸手撒種叫傳播，用力向下叫插入。" }
+    ]
+  },
+  6: {
+    title: "第六課《世足賽的贏家》",
+    questions: [
+      { pre: "", target: "紡", post: "織", zhuyin: "ㄈㄤˇ", masked: "⬛＋方", options: ["紡", "仿"], diff: "糹（絞絲） vs 亻（單人旁）", memo: "絲線繞紗為紡線，跟人學樣是模仿。" },
+      { pre: "紡", target: "織", post: "", zhuyin: "ㄓ", masked: "⬛＋戠", options: ["織", "職"], diff: "糹（絞絲） vs 耳（耳部）", memo: "絲線穿梭成編織，用耳聽令守職責。" },
+      { pre: "", target: "銷", post: "毀", zhuyin: "ㄒㄧㄠ", masked: "⬛＋肖", options: ["銷", "消"], diff: "金（金屬部） vs 氵（水部）", memo: "金鎔成液叫銷毀，水滴蒸發全消散。" },
+      { pre: "銷", target: "毀", post: "", zhuyin: "ㄏㄨㄟˇ", masked: "臼工＋⬛", options: ["毀", "殷"], diff: "臼＋工＋殳 vs 殳（左部身）", memo: "砸破臼臼徹底毀滅，殷切期盼記在心。" },
+      { pre: "", target: "廢", post: "棄物", zhuyin: "ㄈㄟˋ", masked: "⬛＋發", options: ["廢", "發"], diff: "广（廣字頭） vs 癶（起步邁開）", memo: "房屋破舊成廢墟，邁步拉弓把箭發。" },
+      { pre: "寶特", target: "瓶", post: "", zhuyin: "ㄆㄧㄥˊ", masked: "幷＋⬛", options: ["瓶", "併"], diff: "瓦（陶瓦容器） vs 亻（單人旁）", memo: "瓦土燒做大花瓶，兩人並肩齊合併。" },
+      { pre: "", target: "融", post: "化", zhuyin: "ㄖㄨㄥˊ", masked: "鬲＋⬛", options: ["融", "隔"], diff: "鬲＋虫 vs 阝＋鬲", memo: "鍋熱如水冰融化，高牆聳立把人隔。" },
+      { pre: "", target: "抽", post: "絲", zhuyin: "ㄔㄡ", masked: "⬛＋由", options: ["抽", "由"], diff: "扌（手部） vs 無手旁", memo: "伸手出來往上抽，從何而來找事由。" },
+      { pre: "", target: "紗", post: "線", zhuyin: "ㄕㄚ", masked: "⬛＋少", options: ["紗", "沙"], diff: "糹（絞絲） vs 氵（水部）", memo: "絲縷織成薄白紗，水邊細石是微沙。" },
+      { pre: "濕", target: "潤", post: "", zhuyin: "ㄖㄨㄣˋ", masked: "⬛＋閏", options: ["潤", "閏"], diff: "氵（水部） vs 門（門部）", memo: "水分滋補名滋潤，門裡藏王是閏年。" },
+      { pre: "", target: "擺", post: "脫", zhuyin: "ㄅㄞˇ", masked: "⬛＋罷", options: ["擺", "罷"], diff: "扌（手部） vs 四（網部）", memo: "用手搖動揮手擺，捕魚收網請作罷。" },
+      { pre: "擺", target: "脫", post: "", zhuyin: "ㄊㄨㄛ", masked: "⬛＋兌", options: ["脫", "說"], diff: "月（肉身） vs 言（言部）", memo: "金蟬脫殼肉身脫，開口言語話小說。" }
+    ]
+  },
+  7: {
+    title: "第七課《美景閒情——詩兩首》",
+    questions: [
+      { pre: "鹿", target: "柴", post: "", zhuyin: "ㄓㄞˋ", speechWord: "鹿寨", speechTarget: "寨", masked: "此＋⬛", options: ["柴", "紫"], diff: "木（木部） vs 糸（絲部）", memo: "砍下木頭作木柴，絲染紅藍是深紫。" },
+      { pre: "", target: "返", post: "景", zhuyin: "ㄈㄢˇ", masked: "⬛＋反", options: ["返", "反"], diff: "辶（走部） vs 無走旁", memo: "走在路上折返回，單單翻轉手反手。" },
+      { pre: "返", target: "景", post: "", zhuyin: "ㄧㄥˇ", speechWord: "返影", speechTarget: "影", masked: "日＋⬛", options: ["景", "影"], diff: "日（日光） vs 彡（光影紋理）", memo: "日光普照好風景，日光照身留倒影。" },
+      { pre: "青", target: "苔", post: "", zhuyin: "ㄊㄞˊ", masked: "⬛／台", options: ["苔", "抬"], diff: "艹（草部） vs 扌（手部）", memo: "陰濕長草青石苔，雙手用力向上抬。" },
+      { pre: "鳥鳴", target: "澗", post: "", zhuyin: "ㄐㄧㄢˋ", masked: "⬛＋間", options: ["澗", "簡"], diff: "氵（水部） vs 竹（竹頭）", memo: "兩山水流山谷澗，竹削成策叫簡牘。" },
+      { pre: "", target: "桂", post: "花", zhuyin: "ㄍㄨㄟˋ", masked: "⬛＋圭", options: ["桂", "掛"], diff: "木（木部） vs 扌（手部）", memo: "木本清香八月桂，伸手拿鉤把衣掛。" },
+      { pre: "", target: "驚", post: "動", zhuyin: "ㄐㄧㄥ", masked: "敬＋⬛", options: ["驚", "敬"], diff: "馬（馬部） vs 攴（輕敲）", memo: "馬匹失控受大驚，心懷肅穆表尊敬。" },
+      { pre: "", target: "幽", post: "靜", zhuyin: "ㄧㄡ", masked: "山＋⬛", options: ["幽", "由"], diff: "山＋雙幺 vs 田（出頭）", memo: "深山小絲極幽深，心甘情願任由你。" },
+      { pre: "休", target: "憩", post: "", zhuyin: "ㄑㄧˋ", masked: "舌自＋⬛", options: ["憩", "甜"], diff: "鼻＋心 vs 甘（甘甜）", memo: "歇下心來深深憩，舌嘗蜜糖味甘甜。" },
+      { pre: "", target: "寂", post: "靜", zhuyin: "ㄐㄧˊ", masked: "⬛＋叔", options: ["寂", "叔"], diff: "宀（屋下無聲） vs 又（右手）", memo: "屋下無人真寂寞，挽起手袖好小叔。" }
+    ]
+  },
+  8: {
+    title: "第八課《葫蘆瓜》",
+    questions: [
+      { pre: "", target: "葫", post: "蘆", zhuyin: "ㄏㄨˊ", masked: "⬛／胡", options: ["葫", "胡"], diff: "艹（草部） vs 月（肉部）", memo: "藤蔓結瓜草字葫，長出鬍鬚老二胡。" },
+      { pre: "葫", target: "蘆", post: "", zhuyin: "ㄌㄨˊ", masked: "⬛／盧", options: ["蘆", "盧"], diff: "艹（草部） vs 皿（器皿）", memo: "藥草成熟草字蘆，黑色瞳孔單名盧。" },
+      { pre: "藤", target: "蔓", post: "", zhuyin: "ㄇㄢˋ", masked: "⬛／曼", options: ["蔓", "慢"], diff: "艹（草部） vs 忄（心部）", memo: "草苗爬竿叫藤蔓，心態悠閒走得慢。" },
+      { pre: "", target: "攀", post: "爬", zhuyin: "ㄆㄢ", masked: "樊＋⬛", options: ["攀", "梵"], diff: "樊＋手 vs 樊＋木", memo: "用手緊抓努力攀，林木深處念梵音。" },
+      { pre: "攀", target: "爬", post: "", zhuyin: "ㄆㄚˊ", masked: "⬛＋巴", options: ["爬", "抓"], diff: "爪＋巴 vs 扌＋爪", memo: "爪子貼地緩緩爬，動手伸指一把抓。" },
+      { pre: "", target: "卷", post: "鬚", zhuyin: "ㄐㄩㄢˇ", speechWord: "捲鬚", speechTarget: "捲", masked: "龹＋⬛", options: ["卷", "券"], diff: "㔾（屈身） vs 刀（刀部）", memo: "彎曲盤曲像蛋卷，拿刀裁剪電影券。" },
+      { pre: "卷", target: "鬚", post: "", zhuyin: "ㄒㄩ", masked: "⬛／需", options: ["鬚", "需"], diff: "髟（長毛鬚） vs 雨（雨部）", memo: "臉上下巴長毛鬚，下雨急促是急需。" },
+      { pre: "造", target: "訪", post: "", zhuyin: "ㄈㄤˇ", masked: "⬛＋方", options: ["訪", "防"], diff: "言（言部） vs 阝（阜部土牆）", memo: "開口探問去參訪，築起土牆多提防。" },
+      { pre: "", target: "雜", post: "枝", zhuyin: "ㄗㄚˊ", masked: "九木＋⬛", options: ["雜", "朵"], diff: "九＋木＋衣 vs 几＋木", memo: "萬物混雜碎枝雜，樹梢開滿小花朵。" },
+      { pre: "", target: "呵", post: "護", zhuyin: "ㄏㄜ", masked: "⬛＋可", options: ["呵", "可"], diff: "口（口部） vs 無口旁", memo: "輕聲哈氣張口呵，點頭答應讚可以。" },
+      { pre: "呵", target: "護", post: "", zhuyin: "ㄏㄨˋ", masked: "⬛＋蒦", options: ["護", "穫"], diff: "言（言部） vs 禾（禾部）", memo: "開口守護相庇護，稻禾滿滿大收穫。" }
+    ]
+  },
+  9: {
+    title: "第九課《窗邊的鳴聲》",
+    questions: [
+      { pre: "沉", target: "寂", post: "", zhuyin: "ㄐㄧˊ", masked: "⬛＋叔", options: ["寂", "叔"], diff: "宀（屋下無聲） vs 又（手部）", memo: "屋裡無人萬籟寂，爸爸兄弟叫阿叔。" },
+      { pre: "", target: "案", post: "頭", zhuyin: "ㄢˋ", masked: "安＋⬛", options: ["案", "按"], diff: "木（桌几） vs 扌（手部）", memo: "木做桌几放桌案，動手下壓快按鈴。" },
+      { pre: "", target: "隱", post: "密", zhuyin: "ㄧㄣˇ", masked: "⬛＋隐", options: ["隱", "穩"], diff: "阝（土牆蔽匿） vs 禾（禾苗扎根）", memo: "土丘隱蔽藏隱密，禾苗扎根站得穩。" },
+      { pre: "隱", target: "密", post: "", zhuyin: "ㄇㄧˋ", masked: "宀必＋⬛", options: ["密", "蜜"], diff: "山（山林） vs 虫（昆蟲）", memo: "山林幽深很祕密，小蟲採花釀甘蜜。" },
+      { pre: "", target: "悄", post: "然", zhuyin: "ㄑㄧㄠˇ", speechWord: "悄然", speechTarget: "悄", masked: "⬛＋肖", options: ["悄", "消"], diff: "忄（心部） vs 氵（水部）", memo: "滿懷心思悄悄走，水流乾涸蒸發消。" },
+      { pre: "", target: "斑", post: "紋", zhuyin: "ㄅㄢ", masked: "王＋⬛＋王", options: ["斑", "班"], diff: "文（花紋） vs 刀（分組）", memo: "文采交錯是斑紋，揮刀分組是一班。" },
+      { pre: "斑", target: "紋", post: "", zhuyin: "ㄨㄣˊ", masked: "⬛＋文", options: ["紋", "文"], diff: "糹（絞絲） vs 純文字", memo: "絲線上色織成紋，落筆成篇好文章。" },
+      { pre: "", target: "棲", post: "息", zhuyin: "ㄑㄧ", speechWord: "七息", speechTarget: "七", masked: "⬛＋妻", options: ["棲", "茜"], diff: "木（木部） vs 艹（草部）", memo: "鳥兒宿木來棲息，鮮紅草木茜草茜。" },
+      { pre: "驚", target: "擾", post: "", zhuyin: "ㄖㄠˇ", masked: "⬛＋憂", options: ["擾", "優"], diff: "扌（手部） vs 亻（單人旁）", memo: "伸手揮舞成驚擾，知書達禮真優雅。" },
+      { pre: "平", target: "添", post: "", zhuyin: "ㄊㄧㄢ", masked: "⬛＋忝", options: ["添", "天"], diff: "氵＋忝 vs 橫劃出頂", memo: "水滴如意再平添，頭頂上方無窮天。" }
+    ]
+  },
+  10: {
+    title: "第十課《敏銳觀察》",
+    questions: [
+      { pre: "", target: "敏", post: "銳", zhuyin: "ㄇㄧㄣˇ", masked: "每＋⬛", options: ["敏", "繁"], diff: "每＋攵 vs 每＋糸", memo: "步伐靈巧思緒敏，絲線多端真繁雜。" },
+      { pre: "敏", target: "銳", post: "", zhuyin: "ㄖㄨㄟˋ", masked: "⬛＋兌", options: ["銳", "說"], diff: "金（金屬部） vs 言（言部）", memo: "金屬鋒利很敏銳，口中講話叫解說。" },
+      { pre: "", target: "輪", post: "廓", zhuyin: "ㄌㄨㄣˊ", masked: "⬛＋侖", options: ["輪", "論"], diff: "車（車部） vs 言（言部）", memo: "裝上車子大車輪，用言語商量討論。" },
+      { pre: "輪", target: "廓", post: "", zhuyin: "ㄎㄨㄛˋ", masked: "⬛＋郭", options: ["廓", "郭"], diff: "广（廣字頭） vs 阝（右邑旁）", memo: "廣大空地現輪廓，外圍城牆稱城郭。" },
+      { pre: "", target: "漂", post: "移", zhuyin: "ㄆㄧㄠ", speechWord: "飄移", speechTarget: "飄", masked: "⬛＋票", options: ["漂", "票"], diff: "氵（水部） vs 無水旁", memo: "水面浮浮四處漂，紙鈔憑證是一票。" },
+      { pre: "漂", target: "移", post: "", zhuyin: "ㄧˊ", masked: "⬛＋多", options: ["移", "多"], diff: "禾（禾部） vs 雙夕相疊", memo: "挪動稻禾把它移，夕陽疊夕收穫多。" },
+      { pre: "靈光", target: "乍", post: "現", zhuyin: "ㄓㄚˋ", masked: "乍", options: ["乍", "作"], diff: "無單人旁 vs 亻（單人旁）", memo: "刀刺初破突生乍，動身實踐在作工。" },
+      { pre: "", target: "芭", post: "比", zhuyin: "ㄅㄚ", masked: "⬛／巴", options: ["芭", "巴"], diff: "艹（草部） vs 無草頭", memo: "草花開成好芭比，蛇尾纏繞攀在巴。" },
+      { pre: "芭", target: "比", post: "", zhuyin: "ㄅㄧˇ", masked: "匕＋匕", options: ["比", "北"], diff: "兩匕朝右 vs 兩匕相背", memo: "兩人齊跑來評比，背向而立坐朝北。" },
+      { pre: "女", target: "娃", post: "", zhuyin: "ㄨㄚˊ", masked: "⬛＋哇(省)", options: ["娃", "哇"], diff: "女（女部） vs 口（口部）", memo: "可愛女孩稱女娃，張嘴哭泣哇哇叫。" },
+      { pre: "", target: "奇", post: "蹟", zhuyin: "ㄑㄧˊ", masked: "⬛＋可", options: ["奇", "寄"], diff: "大＋可 vs 宀（屋頂寄放）", memo: "驚異非凡真驚奇，封進屋中寄信件。" },
+      { pre: "奇", target: "蹟", post: "", zhuyin: "ㄐㄧ", speechWord: "奇蹟", speechTarget: "蹟", masked: "⬛＋責", options: ["蹟", "責"], diff: "足（足部） vs 貝（錢財職責）", memo: "腳步走過成足蹟，欠錢未還負重責。" }
+    ]
+  },
+  11: {
+    title: "第十一課《你一定會聽見的》",
+    questions: [
+      { pre: "", target: "蒲", post: "公英", zhuyin: "ㄆㄨˊ", masked: "⬛／浦", options: ["蒲", "浦"], diff: "艹（草部） vs 氵（水部）", memo: "乘風飛絮草字蒲，水流近海稱水浦。" },
+      { pre: "", target: "充", post: "斥", zhuyin: "ㄔㄨㄥ", masked: "亠＋⬛", options: ["充", "允"], diff: "育（頭角長大） vs 兒（答應允諾）", memo: "塞滿空間稱充斥，開口點頭是允許。" },
+      { pre: "充", target: "斥", post: "", zhuyin: "ㄔˋ", masked: "斤＋⬛", options: ["斥", "斤"], diff: "撇帶點（排斥） vs 斧斤（斤兩）", memo: "揮手排斥多一點，木工伐木用短斤。" },
+      { pre: "", target: "細", post: "微", zhuyin: "ㄒㄧˋ", masked: "⬛＋田", options: ["細", "田"], diff: "糹（絞絲） vs 方田", memo: "絲縷如髮極纖細，方正泥土為禾田。" },
+      { pre: "細", target: "微", post: "", zhuyin: "ㄨㄟˊ", masked: "彳山＋⬛＋攵", options: ["微", "徵"], diff: "山＋一（微小） vs 山＋王（徵求）", memo: "輕巧隱密真微小，王者出令名召徵。" },
+      { pre: "", target: "習", post: "以為常", zhuyin: "ㄒㄧˊ", masked: "羽＋⬛", options: ["習", "羽"], diff: "白（小鳥白羽） vs 雙翼", memo: "幼雛初飛常溫習，雙翅排空是鳥羽。" },
+      { pre: "叮", target: "嚀", post: "", zhuyin: "ㄋㄧㄥˊ", masked: "⬛＋寧", options: ["嚀", "寧"], diff: "口（口部） vs 宀（屋下安寧）", memo: "開口百般再叮嚀，家宅安穩感安寧。" },
+      { pre: "充耳不", target: "聞", post: "", zhuyin: "ㄨㄣˊ", masked: "門＋⬛", options: ["聞", "問"], diff: "耳（耳部） vs 口（口部）", memo: "門內留耳聽奇聞，門前開口把路問。" },
+      { pre: "", target: "麻", post: "木", zhuyin: "ㄇㄚˊ", masked: "广＋⬛", options: ["麻", "牀"], diff: "广＋林（剝麻） vs 爿＋木（木床）", memo: "屋下剝麻手發麻，木板架起安歇牀。" },
+      { pre: "", target: "木", post: "頭人", zhuyin: "ㄇㄨˋ", masked: "木", options: ["木", "本"], diff: "獨木無橫 vs 下有一橫（根部）", memo: "樹木立定名為木，標出樹根是根本。" }
+    ]
+  },
+  12: {
+    title: "第十二課《藍色連身裙》",
+    questions: [
+      { pre: "連身", target: "裙", post: "", zhuyin: "ㄑㄩㄣˊ", masked: "⬛＋君", options: ["裙", "君"], diff: "衤（衣字旁） vs 口（號令）", memo: "衣服布料做短裙，號令天下是明君。" },
+      { pre: "", target: "井", post: "井有條", zhuyin: "ㄐㄧㄥˇ", masked: "井", options: ["井", "開"], diff: "兩豎不出頭 vs 廾（推門）", memo: "挖地圍井叫水井，雙手把門大大開。" },
+      { pre: "井井有", target: "條", post: "", zhuyin: "ㄊㄧㄠˊ", masked: "夂＋⬛", options: ["條", "茶"], diff: "攵（持條掃刷） vs 艹（草茶）", memo: "樹枝條理分整條，草木烘焙泡熱茶。" },
+      { pre: "修", target: "補", post: "", zhuyin: "ㄅㄨˇ", masked: "⬛＋甫", options: ["補", "卜"], diff: "衤（衣字旁） vs 卜卦", memo: "衣服破洞縫修補，龜甲燒裂求一卜。" },
+      { pre: "門", target: "柵", post: "", zhuyin: "ㄓㄢˋ", speechWord: "門站", speechTarget: "站", masked: "⬛＋冊", options: ["柵", "冊"], diff: "木（木部） vs 編繩簡冊", memo: "木棍排排成門柵，繩穿竹簡名手冊。" },
+      { pre: "", target: "煥", post: "然一新", zhuyin: "ㄏㄨㄢˋ", masked: "⬛＋奐", options: ["煥", "換"], diff: "火（火光） vs 扌（手部）", memo: "火光耀眼煥然新，動手交替把它換。" },
+      { pre: "", target: "社", post: "區", zhuyin: "ㄕㄜˋ", masked: "⬛＋土", options: ["社", "土"], diff: "礻（示部/祭神） vs 純土", memo: "敬拜土地為社稷，地質厚實化成土。" },
+      { pre: "社", target: "區", post: "", zhuyin: "ㄑㄩ", options: ["區", "巨"], masked: "匚＋⬛", diff: "品（三口容器） vs 匚＋工（巨尺）", memo: "盒藏多口分管區，工匠握尺真巨大。" },
+      { pre: "感", target: "染", post: "", zhuyin: "ㄖㄢˇ", masked: "氵＋⬛＋木", options: ["染", "柒"], diff: "木＋九＋氵 vs 木＋七＋氵", memo: "浸水九次易感染，大寫數字七名柒。" }
+    ]
+  }
+};
+
+let currentLesson = 1;
+let currentQuestionIndex = 0;
+let currentMode = 'choice';
+let hasAnswered = false;
+
+// 語音報讀：「直笛的笛」（支援多音字校正）
+function speakCurrentWord() {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const wordSpoken = q.speechWord || `${q.pre}${q.target}${q.post}`;
+  const charSpoken = q.speechTarget || q.target;
+  const text = `${wordSpoken}的${charSpoken}`;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'zh-TW';
+  utterance.rate = 0.85;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// 語音報讀口訣
+function speakHintMnemonic() {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const utterance = new SpeechSynthesisUtterance(q.memo);
+  utterance.lang = 'zh-TW';
+  utterance.rate = 0.85;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+function initLessonSelect() {
+  const select = document.getElementById("lessonSelect");
+  select.innerHTML = "";
+  for (let i = 1; i <= 12; i++) {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = lessonsData[i].title;
+    select.appendChild(opt);
+  }
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.getElementById("modeChoiceBtn").classList.toggle("active", mode === 'choice');
+  document.getElementById("modeWriteBtn").classList.toggle("active", mode === 'write');
+  loadQuestion();
+}
+
+function changeLesson(lessonNum) {
+  currentLesson = parseInt(lessonNum);
+  currentQuestionIndex = 0;
+  loadQuestion();
+}
+
+function loadQuestion() {
+  hasAnswered = false;
+  const qList = lessonsData[currentLesson].questions;
+  const q = qList[currentQuestionIndex];
+
+  document.getElementById("scoreDisplay").textContent = `第 ${currentQuestionIndex + 1} / ${qList.length} 題`;
+  document.getElementById("progressBar").style.width = `${((currentQuestionIndex) / qList.length) * 100}%`;
+
+  // 呈現題幹與注音
+  const phraseContainer = document.getElementById("phraseDisplay");
+  phraseContainer.innerHTML = `
+    <span>${q.pre}</span>
+    <div class="target-zhuyin-box">${q.zhuyin}</div>
+    <span>${q.post}</span>
+  `;
+
+  // 部件口訣內容
+  const hintBox = document.getElementById("hintBox");
+  hintBox.style.display = "none";
+  document.getElementById("hintContent").innerHTML = `
+    <strong>🔍 部件差異：</strong>${q.diff}<br>
+    <strong>💡 記憶口訣：</strong>${q.memo}
+  `;
+
+  // 重置反饋區
+  const feedbackBox = document.getElementById("feedbackBox");
+  feedbackBox.style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+
+  if (currentMode === 'choice') {
+    document.getElementById("optionsGrid").style.display = "grid";
+    document.getElementById("maskedWriteContainer").style.display = "none";
+
+    const optionsGrid = document.getElementById("optionsGrid");
+    optionsGrid.innerHTML = "";
+    const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+    shuffledOptions.forEach(optChar => {
+      const btn = document.createElement("button");
+      btn.className = "btn-opt";
+      btn.textContent = optChar;
+      btn.disabled = false;
+      btn.onclick = () => handleChoice(optChar, btn);
+      optionsGrid.appendChild(btn);
+    });
+  } else {
+    document.getElementById("optionsGrid").style.display = "none";
+    document.getElementById("maskedWriteContainer").style.display = "flex";
+
+    document.getElementById("maskedCharDisplay").textContent = q.masked || q.target;
+    document.getElementById("revealBox").style.display = "none";
+    clearCanvas();
+  }
+
+  // 進入題目時自動報讀
+  speakCurrentWord();
+}
+
+function toggleHint() {
+  const hintBox = document.getElementById("hintBox");
+  hintBox.style.display = hintBox.style.display === "none" ? "block" : "none";
+}
+
+function handleChoice(chosenChar, btnElement) {
+  if (hasAnswered) return;
+  hasAnswered = true;
+
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const isCorrect = (chosenChar === q.target);
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  document.querySelectorAll(".btn-opt").forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === q.target) btn.classList.add("correct");
+  });
+
+  if (isCorrect) {
+    btnElement.classList.add("correct");
+    feedbackBox.className = "feedback-box correct";
+    feedbackBox.innerHTML = `<strong>太棒了，答對了！</strong> 正確字是【${q.target}】。<br>口訣：${q.memo}`;
+  } else {
+    btnElement.classList.add("wrong");
+    feedbackBox.className = "feedback-box wrong";
+    feedbackBox.innerHTML = `<strong>再看清楚喔！</strong> 正確字是【${q.target}】。<br>差異：${q.diff}<br>口訣：${q.memo}`;
+    document.getElementById("hintBox").style.display = "block";
+  }
+
+  feedbackBox.style.display = "block";
+  showNextButton();
+}
+
+function revealAnswer() {
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const revealBox = document.getElementById("revealBox");
+  revealBox.style.display = "block";
+  revealBox.innerHTML = `完整生字是：<span style="font-size: 2.2rem; color: #10B981; font-weight: 900;">【${q.target}】</span>（${q.pre}${q.target}${q.post}）<br><span style="font-size: 0.95rem; color: #475569;">口訣：${q.memo}</span>`;
+  showNextButton();
+}
+
+function showNextButton() {
+  const nextBtn = document.getElementById("nextBtn");
+  const qList = lessonsData[currentLesson].questions;
+  nextBtn.textContent = (currentQuestionIndex === qList.length - 1) ? "本課完成！再練一次 🔄" : "下一題 ➜";
+  nextBtn.style.display = "block";
+}
+
+function nextQuestion() {
+  const qList = lessonsData[currentLesson].questions;
+  if (currentQuestionIndex < qList.length - 1) {
+    currentQuestionIndex++;
+    loadQuestion();
+  } else {
+    currentQuestionIndex = 0;
+    loadQuestion();
+  }
+}
+
+// 手寫板邏輯
+const canvas = document.getElementById("writeCanvas");
+const ctx = canvas.getContext("2d");
+let isDrawing = false;
+
+ctx.lineWidth = 6;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+ctx.strokeStyle = "#1E293B";
+
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+function startDraw(e) {
+  isDrawing = true;
+  const pos = getCanvasPos(e);
+  ctx.beginPath();
+  ctx.moveTo(pos.x, pos.y);
+  e.preventDefault();
+}
+
+function draw(e) {
+  if (!isDrawing) return;
+  const pos = getCanvasPos(e);
+  ctx.lineTo(pos.x, pos.y);
+  ctx.stroke();
+  e.preventDefault();
+}
+
+function stopDraw() {
+  isDrawing = false;
+}
+
+canvas.addEventListener("mousedown", startDraw);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDraw);
+canvas.addEventListener("mouseleave", stopDraw);
+
+canvas.addEventListener("touchstart", startDraw, { passive: false });
+canvas.addEventListener("touchmove", draw, { passive: false });
+canvas.addEventListener("touchend", stopDraw);
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+window.onload = () => {
+  initLessonSelect();
+  changeLesson(1);
+};
+</script>
+</body>
+</html>
