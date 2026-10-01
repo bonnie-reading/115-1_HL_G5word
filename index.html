@@ -44,7 +44,59 @@
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
+    }
+
+    /* 頂部遊戲化狀態列 */
+    .game-statusbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      padding: 10px 16px;
+      border-radius: 16px;
+      gap: 10px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-rank {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .exp-bar-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .exp-track {
+      width: 80px;
+      height: 8px;
+      background: #CBD5E1;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .exp-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.3s;
     }
 
     .header-bar {
@@ -66,7 +118,7 @@
       background: var(--primary-light);
       color: var(--primary);
       border: 2px solid transparent;
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 12px;
       font-size: 0.95rem;
       font-weight: 700;
@@ -130,12 +182,12 @@
       background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
       border: 2px solid #E2E8F0;
       border-radius: 20px;
-      padding: 24px 16px;
+      padding: 20px 16px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .phrase-display {
@@ -146,7 +198,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      min-height: 70px;
+      min-height: 65px;
     }
 
     .target-zhuyin-box {
@@ -214,12 +266,12 @@
       width: 100%;
       background: var(--accent-light);
       border-left: 4px solid var(--accent);
-      padding: 14px 16px;
+      padding: 12px 16px;
       border-radius: 8px;
       text-align: left;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: #92400E;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .hint-audio-btn {
@@ -242,7 +294,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .btn-opt {
@@ -255,7 +307,7 @@
       font-size: 3.2rem;
       font-weight: 800;
       cursor: pointer;
-      padding: 20px;
+      padding: 18px;
       transition: all 0.2s;
       user-select: none;
     }
@@ -279,13 +331,13 @@
       animation: shake 0.4s ease-in-out;
     }
 
-    /* 模式二：遮蔽部件看寫關卡 */
+    /* 模式二：遮部件寫字關卡 */
     .masked-write-container {
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
-      margin-top: 10px;
+      gap: 14px;
+      margin-top: 8px;
     }
 
     .masked-display-card {
@@ -293,19 +345,63 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       background: #FFF;
       border: 2px dashed #CBD5E1;
-      padding: 16px 24px;
+      padding: 12px 20px;
       border-radius: 16px;
       width: 100%;
     }
 
     .masked-char-box {
-      font-size: 3.8rem;
+      font-size: 3.5rem;
       font-weight: 900;
       letter-spacing: 6px;
       color: #1E293B;
+    }
+
+    /* 三階求救工具列 */
+    .sos-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #F1F5F9;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .btn-sos {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #475569;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-sos:hover {
+      background: #FEF3C7;
+      border-color: #D97706;
+      color: #92400E;
+    }
+
+    .sos-message {
+      display: none;
+      width: 100%;
+      font-size: 0.9rem;
+      color: #0369A1;
+      background: #E0F2FE;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-align: center;
     }
 
     .canvas-wrapper {
@@ -314,6 +410,20 @@
       border-radius: 16px;
       background: #FFFFFF;
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .watermark-guide {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 8.5rem;
+      font-weight: 900;
+      color: rgba(79, 70, 229, 0.18);
+      pointer-events: none;
+      user-select: none;
+      display: none;
     }
 
     .canvas-grid-line {
@@ -353,23 +463,35 @@
       cursor: pointer;
     }
 
+    .btn-self-check {
+      background: #10B981;
+      color: white;
+      border: none;
+    }
+
+    .btn-self-check:hover {
+      background: #059669;
+    }
+
+    /* 雙向檢核對照區 */
     .reveal-box {
       display: none;
-      font-size: 1.25rem;
-      color: var(--primary);
-      font-weight: 800;
-      padding: 10px 20px;
-      background: var(--primary-light);
-      border-radius: 10px;
+      font-size: 1.1rem;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      border-radius: 16px;
+      padding: 16px;
       text-align: center;
+      width: 100%;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .feedback-box {
       display: none;
       border-radius: 14px;
-      padding: 14px 18px;
+      padding: 12px 16px;
       font-size: 0.95rem;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .feedback-box.correct {
@@ -408,6 +530,23 @@
 <body>
 
 <div class="app-container">
+  <!-- 頂部遊戲化狀態列 -->
+  <div class="game-statusbar">
+    <div class="user-profile">
+      <span>🎒</span>
+      <span class="badge-rank" id="userRankBadge">Lv.1 生字見習生</span>
+    </div>
+    <div class="exp-bar-box">
+      <span>經驗值</span>
+      <div class="exp-track">
+        <div class="exp-fill" id="expFill"></div>
+      </div>
+      <span id="expText">0/100</span>
+    </div>
+    <div class="badge" id="scoreDisplay">第 1 / 14 題</div>
+  </div>
+
+  <!-- 課次與模式選擇 -->
   <div class="header-bar">
     <div class="controls-left">
       <select id="lessonSelect" onchange="changeLesson(this.value)"></select>
@@ -417,8 +556,6 @@
         <button class="mode-btn" id="modeWriteBtn" onclick="switchMode('write')">遮部件看寫 ✍</button>
       </div>
     </div>
-
-    <div class="badge" id="scoreDisplay">第 1 / 14 題</div>
   </div>
 
   <div class="progress-track">
@@ -449,14 +586,24 @@
     <!-- 模式一：形近字選項 -->
     <div class="options-grid" id="optionsGrid"></div>
 
-    <!-- 模式二：遮蔽部件看寫關卡 -->
+    <!-- 模式二：遮部件寫字關卡 + 三階求救機制 -->
     <div class="masked-write-container" id="maskedWriteContainer">
       <div class="masked-display-card">
         <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 700;">看殘餘部件，寫出完整生字：</span>
         <div class="masked-char-box" id="maskedCharDisplay">⬛＋皮</div>
       </div>
 
+      <!-- 三階求救工具列 -->
+      <div class="sos-panel">
+        <button class="btn-sos" onclick="triggerSOS(1)">🆘 求救 1：結構線索</button>
+        <button class="btn-sos" onclick="triggerSOS(2)">✨ 求救 2：淡灰描紅</button>
+        <button class="btn-sos" onclick="triggerSOS(3)">👀 求救 3：揭曉正解</button>
+        <div class="sos-message" id="sosMessage"></div>
+      </div>
+
+      <!-- 手寫畫布 -->
       <div class="canvas-wrapper">
+        <div class="watermark-guide" id="watermarkGuide">彼</div>
         <div class="canvas-grid-line canvas-grid-h"></div>
         <div class="canvas-grid-line canvas-grid-v"></div>
         <canvas id="writeCanvas" width="220" height="220"></canvas>
@@ -464,13 +611,14 @@
 
       <div class="canvas-tools">
         <button class="btn-tool" onclick="clearCanvas()">🧹 清除重寫</button>
-        <button class="btn-tool" onclick="revealAnswer()">👀 看正解對答案</button>
+        <button class="btn-tool btn-self-check" onclick="confirmWriteSuccess()">✅ 我寫好了！對答案</button>
       </div>
 
+      <!-- 自我檢核對照區塊 -->
       <div class="reveal-box" id="revealBox"></div>
     </div>
 
-    <!-- 反饋與按鈕 -->
+    <!-- 即時反饋 -->
     <div class="feedback-box" id="feedbackBox" style="margin-top: 14px;"></div>
     <button class="btn-next" id="nextBtn" onclick="nextQuestion()" style="margin-top: 14px;">
       下一題 ➜
@@ -479,7 +627,7 @@
 </div>
 
 <script>
-// 1至12課完整題庫
+// 1至12課資料庫（含多音字校正發音）
 const lessonsData = {
   1: {
     title: "第一課《你我之間》",
@@ -569,32 +717,32 @@ const lessonsData = {
       { pre: "", target: "授", post: "權", zhuyin: "ㄕㄡˋ", masked: "⬛＋受", options: ["授", "受"], diff: "扌（手部） vs 無手旁", memo: "伸手給予稱傳授，張手接納是接受。" },
       { pre: "", target: "違", post: "法", zhuyin: "ㄨㄟˊ", masked: "⬛＋韋", options: ["違", "偉"], diff: "辶（走部） vs 亻（單人旁）", memo: "走偏正道是違規，人品卓越是偉大。" },
       { pre: "", target: "侵", post: "犯", zhuyin: "ㄑㄧㄣ", masked: "⬛＋寖(省)", options: ["侵", "浸"], diff: "亻（單人旁） vs 氵（水部）", memo: "有人持帚偷偷侵略，用水淹泡叫浸濕。" },
-      { pre: "侵", target: "犯", post: "", zhuyin: "ㄈㄢˋ", masked: "犭＋⬛", options: ["犯", "狂"], diff: "卩（跪坐人） vs 王（王字）", memo: "野犬咬人觸犯法，野犬稱王真發狂。" },
-      { pre: "", target: "盜", post: "版", zhuyin: "ㄉㄠˋ", masked: "㳄＋⬛", options: ["盜", "姿"], diff: "氵＋皿 vs 女（女部）", memo: "貪求財物叫強盜，女孩儀態好身姿。" },
-      { pre: "", target: "剪", post: "輯", zhuyin: "ㄐㄧㄢˇ", masked: "前＋⬛", options: ["剪", "箭"], diff: "刀（刀部） vs 竹（竹頭）", memo: "拿刀裁切修剪片，竹竿削尖射出箭。" },
-      { pre: "剪", target: "輯", post: "", zhuyin: "ㄐㄧˊ", masked: "⬛＋咠", options: ["輯", "緝"], diff: "車（車部） vs 糹（絞絲）", memo: "車載聚集眾篇輯，絲繩抓拿通緝犯。" },
-      { pre: "", target: "營", post: "利", zhuyin: "ㄧㄥˊ", masked: "𤇾＋⬛", options: ["營", "榮"], diff: "呂（營帳） vs 木（木部）", memo: "築起營舍經營營業，木枝開花光榮耀。" },
+      { pre: "侵", target: "犯", post: "", zhuyin: "ㄈㄢˋ", options: ["犯", "狂"], masked: "犭＋⬛", diff: "卩（跪坐人） vs 王（王字）", memo: "野犬咬人觸犯法，野犬稱王真發狂。" },
+      { pre: "", target: "盜", post: "版", zhuyin: "ㄉㄠˋ", options: ["盜", "姿"], masked: "㳄＋⬛", diff: "氵＋皿 vs 女（女部）", memo: "貪求財物叫強盜，女孩儀態好身姿。" },
+      { pre: "", target: "剪", post: "輯", zhuyin: "ㄐㄧㄢˇ", options: ["剪", "箭"], masked: "前＋⬛", diff: "刀（刀部） vs 竹（竹頭）", memo: "拿刀裁切修剪片，竹竿削尖射出箭。" },
+      { pre: "剪", target: "輯", post: "", zhuyin: "ㄐㄧˊ", options: ["輯", "緝"], masked: "⬛＋咠", diff: "車（車部） vs 糹（絞絲）", memo: "車載聚集眾篇輯，絲繩抓拿通緝犯。" },
+      { pre: "", target: "營", post: "利", zhuyin: "ㄧㄥˊ", options: ["營", "榮"], masked: "𤇾＋⬛", diff: "呂（營帳） vs 木（木部）", memo: "築起營舍經營營業，木枝開花光榮耀。" },
       { pre: "", target: "創", post: "作", zhuyin: "ㄔㄨㄤˋ", speechWord: "創作", speechTarget: "創", masked: "倉＋⬛", options: ["創", "倉"], diff: "刂（刀部） vs 無刀", memo: "刀刻立新為創造，米糧積聚大穀倉。" },
-      { pre: "出", target: "版", post: "", zhuyin: "ㄅㄢˇ", masked: "⬛＋反", options: ["版", "板"], diff: "片（木片） vs 木（原木）", memo: "片片木板印刷版，整塊大木是黑板。" },
-      { pre: "權", target: "益", post: "", zhuyin: "ㄧˋ", masked: "八一＋⬛", options: ["益", "溢"], diff: "皿（器皿） vs 氵（水部）", memo: "水滿器皿大家受益，水加太滿往外溢。" },
+      { pre: "出", target: "版", post: "", zhuyin: "ㄅㄢˇ", options: ["版", "板"], masked: "⬛＋反", diff: "片（木片） vs 木（原木）", memo: "片片木板印刷版，整塊大木是黑板。" },
+      { pre: "權", target: "益", post: "", zhuyin: "ㄧˋ", options: ["益", "溢"], masked: "八一＋⬛", diff: "皿（器皿） vs 氵（水部）", memo: "水滿器皿大家受益，水加太滿往外溢。" },
       { pre: "傳", target: "播", post: "", zhuyin: "ㄅㄛ", speechWord: "傳播", speechTarget: "播", masked: "⬛＋番", options: ["播", "插"], diff: "番（播種） vs 千（插刺）", memo: "伸手撒種叫傳播，用力向下叫插入。" }
     ]
   },
   6: {
     title: "第六課《世足賽的贏家》",
     questions: [
-      { pre: "", target: "紡", post: "織", zhuyin: "ㄈㄤˇ", masked: "⬛＋方", options: ["紡", "仿"], diff: "糹（絞絲） vs 亻（單人旁）", memo: "絲線繞紗為紡線，跟人學樣是模仿。" },
-      { pre: "紡", target: "織", post: "", zhuyin: "ㄓ", masked: "⬛＋戠", options: ["織", "職"], diff: "糹（絞絲） vs 耳（耳部）", memo: "絲線穿梭成編織，用耳聽令守職責。" },
-      { pre: "", target: "銷", post: "毀", zhuyin: "ㄒㄧㄠ", masked: "⬛＋肖", options: ["銷", "消"], diff: "金（金屬部） vs 氵（水部）", memo: "金鎔成液叫銷毀，水滴蒸發全消散。" },
-      { pre: "銷", target: "毀", post: "", zhuyin: "ㄏㄨㄟˇ", masked: "臼工＋⬛", options: ["毀", "殷"], diff: "臼＋工＋殳 vs 殳（左部身）", memo: "砸破臼臼徹底毀滅，殷切期盼記在心。" },
-      { pre: "", target: "廢", post: "棄物", zhuyin: "ㄈㄟˋ", masked: "⬛＋發", options: ["廢", "發"], diff: "广（廣字頭） vs 癶（起步邁開）", memo: "房屋破舊成廢墟，邁步拉弓把箭發。" },
-      { pre: "寶特", target: "瓶", post: "", zhuyin: "ㄆㄧㄥˊ", masked: "幷＋⬛", options: ["瓶", "併"], diff: "瓦（陶瓦容器） vs 亻（單人旁）", memo: "瓦土燒做大花瓶，兩人並肩齊合併。" },
-      { pre: "", target: "融", post: "化", zhuyin: "ㄖㄨㄥˊ", masked: "鬲＋⬛", options: ["融", "隔"], diff: "鬲＋虫 vs 阝＋鬲", memo: "鍋熱如水冰融化，高牆聳立把人隔。" },
-      { pre: "", target: "抽", post: "絲", zhuyin: "ㄔㄡ", masked: "⬛＋由", options: ["抽", "由"], diff: "扌（手部） vs 無手旁", memo: "伸手出來往上抽，從何而來找事由。" },
-      { pre: "", target: "紗", post: "線", zhuyin: "ㄕㄚ", masked: "⬛＋少", options: ["紗", "沙"], diff: "糹（絞絲） vs 氵（水部）", memo: "絲縷織成薄白紗，水邊細石是微沙。" },
-      { pre: "濕", target: "潤", post: "", zhuyin: "ㄖㄨㄣˋ", masked: "⬛＋閏", options: ["潤", "閏"], diff: "氵（水部） vs 門（門部）", memo: "水分滋補名滋潤，門裡藏王是閏年。" },
-      { pre: "", target: "擺", post: "脫", zhuyin: "ㄅㄞˇ", masked: "⬛＋罷", options: ["擺", "罷"], diff: "扌（手部） vs 四（網部）", memo: "用手搖動揮手擺，捕魚收網請作罷。" },
-      { pre: "擺", target: "脫", post: "", zhuyin: "ㄊㄨㄛ", masked: "⬛＋兌", options: ["脫", "說"], diff: "月（肉身） vs 言（言部）", memo: "金蟬脫殼肉身脫，開口言語話小說。" }
+      { pre: "", target: "紡", post: "織", zhuyin: "ㄈㄤˇ", options: ["紡", "仿"], masked: "⬛＋方", diff: "糹（絞絲） vs 亻（單人旁）", memo: "絲線繞紗為紡線，跟人學樣是模仿。" },
+      { pre: "紡", target: "織", post: "", zhuyin: "ㄓ", options: ["織", "職"], masked: "⬛＋戠", diff: "糹（絞絲） vs 耳（耳部）", memo: "絲線穿梭成編織，用耳聽令守職責。" },
+      { pre: "", target: "銷", post: "毀", zhuyin: "ㄒㄧㄠ", options: ["銷", "消"], masked: "⬛＋肖", diff: "金（金屬部） vs 氵（水部）", memo: "金鎔成液叫銷毀，水滴蒸發全消散。" },
+      { pre: "銷", target: "毀", post: "", zhuyin: "ㄏㄨㄟˇ", options: ["毀", "殷"], masked: "臼工＋⬛", diff: "臼＋工＋殳 vs 殳（左部身）", memo: "砸破臼臼徹底毀滅，殷切期盼記在心。" },
+      { pre: "", target: "廢", post: "棄物", zhuyin: "ㄈㄟˋ", options: ["廢", "發"], masked: "⬛＋發", diff: "广（廣字頭） vs 癶（起步邁開）", memo: "房屋破舊成廢墟，邁步拉弓把箭發。" },
+      { pre: "寶特", target: "瓶", post: "", zhuyin: "ㄆㄧㄥˊ", options: ["瓶", "併"], masked: "幷＋⬛", diff: "瓦（陶瓦容器） vs 亻（單人旁）", memo: "瓦土燒做大花瓶，兩人並肩齊合併。" },
+      { pre: "", target: "融", post: "化", zhuyin: "ㄖㄨㄥˊ", options: ["融", "隔"], masked: "鬲＋⬛", diff: "鬲＋虫 vs 阝＋鬲", memo: "鍋熱如水冰融化，高牆聳立把人隔。" },
+      { pre: "", target: "抽", post: "絲", zhuyin: "ㄔㄡ", options: ["抽", "由"], masked: "⬛＋由", diff: "扌（手部） vs 無手旁", memo: "伸手出來往上抽，從何而來找事由。" },
+      { pre: "", target: "紗", post: "線", zhuyin: "ㄕㄚ", options: ["紗", "沙"], masked: "⬛＋少", diff: "糹（絞絲） vs 氵（水部）", memo: "絲縷織成薄白紗，水邊細石是微沙。" },
+      { pre: "濕", target: "潤", post: "", zhuyin: "ㄖㄨㄣˋ", options: ["潤", "閏"], masked: "⬛＋閏", diff: "氵（水部） vs 門（門部）", memo: "水分滋補名滋潤，門裡藏王是閏年。" },
+      { pre: "", target: "擺", post: "脫", zhuyin: "ㄅㄞˇ", options: ["擺", "罷"], masked: "⬛＋罷", diff: "扌（手部） vs 四（網部）", memo: "用手搖動揮手擺，捕魚收網請作罷。" },
+      { pre: "擺", target: "脫", post: "", zhuyin: "ㄊㄨㄛ", options: ["脫", "說"], masked: "⬛＋兌", diff: "月（肉身） vs 言（言部）", memo: "金蟬脫殼肉身脫，開口言語話小說。" }
     ]
   },
   7: {
@@ -696,6 +844,36 @@ let currentQuestionIndex = 0;
 let currentMode = 'choice';
 let hasAnswered = false;
 
+// 遊戲化激勵數值
+let userExp = parseInt(localStorage.getItem('userExp') || '0');
+let userLevel = parseInt(localStorage.getItem('userLevel') || '1');
+let usedSOSCount = 0;
+const ranks = ["Lv.1 生字見習生", "Lv.2 偏旁探索家", "Lv.3 漢字小達人", "Lv.4 語詞大宗師", "Lv.5 國語神射手"];
+
+function saveProgress() {
+  localStorage.setItem('userExp', userExp);
+  localStorage.setItem('userLevel', userLevel);
+}
+
+function addExperience(pts) {
+  userExp += pts;
+  if (userExp >= 100) {
+    userExp -= 100;
+    if (userLevel < ranks.length) {
+      userLevel++;
+      alert(`🎉 恭喜升級！晉升為【${ranks[userLevel-1]}】！獲得全新稱號徽章！`);
+    }
+  }
+  saveProgress();
+  updateExpUI();
+}
+
+function updateExpUI() {
+  document.getElementById("userRankBadge").textContent = ranks[userLevel-1];
+  document.getElementById("expFill").style.width = `${userExp}%`;
+  document.getElementById("expText").textContent = `${userExp}/100`;
+}
+
 // 語音報讀：「直笛的笛」（支援多音字校正）
 function speakCurrentWord() {
   if (!('speechSynthesis' in window)) return;
@@ -752,13 +930,13 @@ function changeLesson(lessonNum) {
 
 function loadQuestion() {
   hasAnswered = false;
+  usedSOSCount = 0;
   const qList = lessonsData[currentLesson].questions;
   const q = qList[currentQuestionIndex];
 
   document.getElementById("scoreDisplay").textContent = `第 ${currentQuestionIndex + 1} / ${qList.length} 題`;
   document.getElementById("progressBar").style.width = `${((currentQuestionIndex) / qList.length) * 100}%`;
 
-  // 呈現題幹與注音
   const phraseContainer = document.getElementById("phraseDisplay");
   phraseContainer.innerHTML = `
     <span>${q.pre}</span>
@@ -766,7 +944,6 @@ function loadQuestion() {
     <span>${q.post}</span>
   `;
 
-  // 部件口訣內容
   const hintBox = document.getElementById("hintBox");
   hintBox.style.display = "none";
   document.getElementById("hintContent").innerHTML = `
@@ -774,7 +951,6 @@ function loadQuestion() {
     <strong>💡 記憶口訣：</strong>${q.memo}
   `;
 
-  // 重置反饋區
   const feedbackBox = document.getElementById("feedbackBox");
   feedbackBox.style.display = "none";
   document.getElementById("nextBtn").style.display = "none";
@@ -800,11 +976,13 @@ function loadQuestion() {
     document.getElementById("maskedWriteContainer").style.display = "flex";
 
     document.getElementById("maskedCharDisplay").textContent = q.masked || q.target;
+    document.getElementById("watermarkGuide").textContent = q.target;
+    document.getElementById("watermarkGuide").style.display = "none";
+    document.getElementById("sosMessage").style.display = "none";
     document.getElementById("revealBox").style.display = "none";
     clearCanvas();
   }
 
-  // 進入題目時自動報讀
   speakCurrentWord();
 }
 
@@ -830,23 +1008,99 @@ function handleChoice(chosenChar, btnElement) {
     btnElement.classList.add("correct");
     feedbackBox.className = "feedback-box correct";
     feedbackBox.innerHTML = `<strong>太棒了，答對了！</strong> 正確字是【${q.target}】。<br>口訣：${q.memo}`;
+    addExperience(25);
   } else {
     btnElement.classList.add("wrong");
     feedbackBox.className = "feedback-box wrong";
     feedbackBox.innerHTML = `<strong>再看清楚喔！</strong> 正確字是【${q.target}】。<br>差異：${q.diff}<br>口訣：${q.memo}`;
     document.getElementById("hintBox").style.display = "block";
+    addExperience(5);
   }
 
   feedbackBox.style.display = "block";
   showNextButton();
 }
 
-function revealAnswer() {
+function triggerSOS(level) {
+  const q = lessonsData[currentLesson].questions[currentQuestionIndex];
+  const sosMsg = document.getElementById("sosMessage");
+  usedSOSCount++;
+
+  if (level === 1) {
+    sosMsg.style.display = "block";
+    sosMsg.innerHTML = `💡 <strong>結構提示：</strong>${q.diff}`;
+  } else if (level === 2) {
+    document.getElementById("watermarkGuide").style.display = "flex";
+    sosMsg.style.display = "block";
+    sosMsg.innerHTML = `✨ <strong>描紅浮水印已開啟！</strong>跟著淡灰色筆畫描寫看看。`;
+  } else if (level === 3) {
+    confirmWriteSuccess(true);
+  }
+}
+
+function isCanvasBlank() {
+  const pixelBuffer = new Uint32Array(
+    ctx.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+  );
+  return !pixelBuffer.some(color => color !== 0);
+}
+
+function confirmWriteSuccess(forceReveal = false) {
+  if (!forceReveal && isCanvasBlank()) {
+    alert("⚠️ 請先在手寫板上練習寫出完整生字，再對答案喔！");
+    return;
+  }
+
   const q = lessonsData[currentLesson].questions[currentQuestionIndex];
   const revealBox = document.getElementById("revealBox");
   revealBox.style.display = "block";
-  revealBox.innerHTML = `完整生字是：<span style="font-size: 2.2rem; color: #10B981; font-weight: 900;">【${q.target}】</span>（${q.pre}${q.target}${q.post}）<br><span style="font-size: 0.95rem; color: #475569;">口訣：${q.memo}</span>`;
-  showNextButton();
+
+  revealBox.innerHTML = `
+    <div style="padding: 6px 0;">
+      <div style="font-size: 1rem; color: #475569; margin-bottom: 6px; font-weight: 700;">請仔細對照你寫的部件與標準答案：</div>
+      <div style="font-size: 3.5rem; color: #4F46E5; font-weight: 900; margin: 4px 0;">【${q.target}】</div>
+      <div style="font-size: 1.05rem; color: #059669; font-weight: 700;">語詞：${q.pre}${q.target}${q.post}</div>
+      <div style="font-size: 0.9rem; color: #B45309; margin: 8px 0; background: #FEF3C7; padding: 6px 10px; border-radius: 8px;">
+        <strong>💡 口訣叮嚀：</strong>${q.memo}
+      </div>
+      
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 14px;">
+        <button onclick="handleSelfCheckResult(false)" style="background: #EF4444; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.95rem;">
+          ❌ 寫錯了（重新寫）
+        </button>
+        <button onclick="handleSelfCheckResult(true)" style="background: #10B981; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 0.95rem;">
+          ⭕ 檢查無誤，完全正確！
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function handleSelfCheckResult(isCorrect) {
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  if (isCorrect) {
+    if (usedSOSCount === 0) {
+      addExperience(35);
+      feedbackBox.className = "feedback-box correct";
+      feedbackBox.innerHTML = `<strong>太棒了！</strong> 零求救自主寫對生字，獲得 +35 EXP！`;
+    } else {
+      addExperience(20);
+      feedbackBox.className = "feedback-box correct";
+      feedbackBox.innerHTML = `<strong>完成練習！</strong> 確實核對並掌握正確生字，獲得 +20 EXP！`;
+    }
+    feedbackBox.style.display = "block";
+    showNextButton();
+  } else {
+    feedbackBox.className = "feedback-box wrong";
+    feedbackBox.innerHTML = `
+      <strong>沒關係，發現錯誤學更快！</strong><br>
+      已為你開啟「淡灰描紅」，請觀察部件差異並在畫布上描寫一次喔！
+    `;
+    feedbackBox.style.display = "block";
+    document.getElementById("watermarkGuide").style.display = "flex";
+    clearCanvas();
+  }
 }
 
 function showNextButton() {
@@ -867,7 +1121,7 @@ function nextQuestion() {
   }
 }
 
-// 手寫板邏輯
+// 畫布操作邏輯
 const canvas = document.getElementById("writeCanvas");
 const ctx = canvas.getContext("2d");
 let isDrawing = false;
@@ -922,6 +1176,7 @@ function clearCanvas() {
 
 window.onload = () => {
   initLessonSelect();
+  updateExpUI();
   changeLesson(1);
 };
 </script>
